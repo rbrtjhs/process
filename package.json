@@ -1,0 +1,21 @@
+{
+  "name": "proc",
+  "version": "1.0.0",
+  "description": "Manage items through specific process(es) specified by steps.",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github-rbrtjhs:rbrtjhs/process.git"
+  },
+  "author": "rbrtjhs@gmail.com",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.1.0"
+  }
+}
