@@ -3,7 +3,70 @@
 pragma solidity ^0.8.0;
 
 import "./Step.sol";
+import "./Item.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract Process {
+contract Process is Ownable {
+    enum ProcessStatus {
+        MODIFIABLE,
+        IN_PROGRESS,
+        FINISHED
+    }
+
+    modifier inStatus(ProcessStatus _status) {
+        require(status == _status);
+        _;
+    }
+
+    modifier onlyStepOwner() {
+        require(steps[stepIndex].owner() == msg.sender);
+        _;
+    }
+
+    Item item;
     Step [] steps;
+    ProcessStatus status;
+    uint256 stepIndex;
+
+    constructor() {
+        status = ProcessStatus.MODIFIABLE;
+        stepIndex = 0;
+    }
+
+    function setItem(Item _item) inStatus(ProcessStatus.MODIFIABLE) external {
+        item = _item;
+    }
+
+    function addStep(Step _step) inStatus(ProcessStatus.MODIFIABLE) external {
+        steps.push(_step);
+        stepIndex++;       
+    }
+
+    function removeSteps(uint256 [] memory _indexes) inStatus(ProcessStatus.MODIFIABLE)  external {
+        for (uint256 i = 0; i < _indexes.length; i++) {
+            removeStep(_indexes[i]);
+        }
+    }
+
+    function removeStep(uint index) inStatus(ProcessStatus.MODIFIABLE) public {
+        if (index >= steps.length) return;
+
+        for (uint i = index; i < steps.length-1; i++){
+            steps[i] = steps[i+1];
+        }
+        delete steps[steps.length-1];
+    }
+
+    function finishCreation() inStatus(ProcessStatus.MODIFIABLE) external {
+        require(steps.length > 0);
+        //require(item);
+        status = ProcessStatus.IN_PROGRESS;
+    }
+
+    function nextStep() onlyStepOwner() external {
+        if (stepIndex < steps.length - 1) {
+            stepIndex++; 
+            steps[stepIndex - 1].transferToStep(steps[stepIndex]);
+        }
+    }
 }

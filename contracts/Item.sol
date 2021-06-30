@@ -9,7 +9,12 @@ contract Item {
     Step initialStep;
     Step currentStep;
     string name;
-    Detail [] details;
+    mapping(address => Detail []) details;
+
+    modifier onlyCurrentStep() {
+        require(msg.sender == address(currentStep));
+        _;
+    }
 
     constructor(string memory _name, Step _initialStep) {
         name = _name;
@@ -17,11 +22,11 @@ contract Item {
         currentStep = _initialStep;
     }
 
-    function addDetail(Detail detail) external {
-        details.push(detail);
+    function addDetail(Detail detail) onlyCurrentStep() external {
+        details[address(currentStep)].push(detail);
     }
 
-    function setStep(Step step) external {
+    function setStep(Step step) onlyCurrentStep() external {
         currentStep = step;
     }
 }
