@@ -23,10 +23,10 @@ contract Process is Ownable {
         _;
     }
 
-    Item item;
-    Step [] steps;
-    ProcessStatus status;
-    uint256 stepIndex;
+    Item public item;
+    Step [] public steps;
+    ProcessStatus public status;
+    uint256 public stepIndex;
 
     constructor() {
         status = ProcessStatus.MODIFIABLE;
