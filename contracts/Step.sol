@@ -15,9 +15,12 @@ contract Step is Ownable {
 
     Process process;
     Item item;
+    string public name;
 
-    constructor (Process _process) {
+    constructor (string memory _name, Process _process) {
         process = _process;
+        name = _name;
+        process.addStep(this);
     }
 
     function addDetail(Detail _detail) onlyOwner() external {

@@ -27,10 +27,12 @@ contract Process is Ownable {
     Step [] public steps;
     ProcessStatus public status;
     uint256 public stepIndex;
+    string public name;
 
-    constructor() {
+    constructor(string memory _name) {
         status = ProcessStatus.MODIFIABLE;
         stepIndex = 0;
+        name = _name;
     }
 
     function setItem(Item _item) inStatus(ProcessStatus.MODIFIABLE) external {

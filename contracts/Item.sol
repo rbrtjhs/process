@@ -6,10 +6,10 @@ import "./Step.sol";
 import "./Detail.sol";
 
 contract Item {
-    Step initialStep;
-    Step currentStep;
-    string name;
-    mapping(address => Detail []) details;
+    Step public initialStep;
+    Step public currentStep;
+    string public name;
+    mapping(address => Detail []) public details;
 
     modifier onlyCurrentStep() {
         require(msg.sender == address(currentStep));
