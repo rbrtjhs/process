@@ -8,8 +8,9 @@ contract("Step", function(accounts) {
     it("Should create process and step and link them", async () => {
         let processContractInstance = await Process.new(PROCESS_NAME);
         let stepContractInstance = await Step.new(STEP_NAME, processContractInstance.address);
-        assert.ok(await processContractInstance.name(), PROCESS_NAME);
-        assert.ok(await stepContractInstance.name(), STEP_NAME);
-        assert.ok(await processContractInstance.steps(0), stepContractInstance.address);
-    })
+        assert.equal(await processContractInstance.name(), PROCESS_NAME);
+        assert.equal(await stepContractInstance.name(), STEP_NAME);
+        assert.equal(await processContractInstance.steps(0), stepContractInstance.address);
+    });
+    
 });

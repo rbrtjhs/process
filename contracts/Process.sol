@@ -40,8 +40,7 @@ contract Process is Ownable {
     }
 
     function addStep(Step _step) inStatus(ProcessStatus.MODIFIABLE) external {
-        steps.push(_step);
-        stepIndex++;       
+        steps.push(_step);   
     }
 
     function removeSteps(uint256 [] memory _indexes) inStatus(ProcessStatus.MODIFIABLE)  external {
@@ -65,7 +64,7 @@ contract Process is Ownable {
         status = ProcessStatus.IN_PROGRESS;
     }
 
-    function nextStep() onlyStepOwner() external {
+    function nextStep() onlyStepOwner() inStatus(ProcessStatus.IN_PROGRESS) external {
         if (stepIndex < steps.length - 1) {
             stepIndex++; 
             steps[stepIndex - 1].transferToStep(steps[stepIndex]);

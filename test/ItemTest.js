@@ -12,8 +12,8 @@ contract("Item", function(accounts) {
         //console.log(processContractInstance.address);
         let stepContractInstance = await Step.new(STEP_NAME, processContractInstance.address);
         let itemContractInstance = await Item.new(ITEM_NAME, stepContractInstance.address);
-        assert.ok(await processContractInstance.name(), PROCESS_NAME);
-        assert.ok(await stepContractInstance.name(), STEP_NAME);
-        assert.ok(await itemContractInstance.name(), ITEM_NAME);
+        assert.equal(await processContractInstance.name(), PROCESS_NAME);
+        assert.equal(await stepContractInstance.name(), STEP_NAME);
+        assert.equal(await itemContractInstance.name(), ITEM_NAME);
     })
 });
