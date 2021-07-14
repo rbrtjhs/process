@@ -60,7 +60,7 @@ contract Process is Ownable {
 
     function finishCreation() inStatus(ProcessStatus.MODIFIABLE) external {
         require(steps.length > 0);
-        //require(item);
+        require(address(item) != address(0));
         status = ProcessStatus.IN_PROGRESS;
     }
 

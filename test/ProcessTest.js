@@ -4,6 +4,8 @@ contract("Process", function(accounts) {
     const PROCESS_NAME = "Process 1";
     const STEP_ADDRESS_1 = accounts[2];
     const STEP_ADDRESS_2 = accounts[3];
+    const STEP_ADDRESS_3 = accounts[4];
+    const ITEM_ADDRESS_1 = accounts[5];
 
     it("Should create Process contract with status 0 (MODIFIABLE) and stepIndex = 0", async () => {
         let processContractInstance = await Process.new(PROCESS_NAME);
@@ -24,10 +26,17 @@ contract("Process", function(accounts) {
         });
     });
 
+    it("Set item.", async() => {
+        let processContractInstance = await Process.new(PROCESS_NAME);
+        await processContractInstance.setItem(ITEM_ADDRESS_1);
+        assert.equal(await processContractInstance.item(), ITEM_ADDRESS_1);
+    });
+
     it("Prevent adding steps if not in MODIFIABLE status.", async () => {
         let processContractInstance = await Process.new(PROCESS_NAME);
         
         await processContractInstance.addStep(STEP_ADDRESS_1);
+        await processContractInstance.setItem(ITEM_ADDRESS_1);
         await processContractInstance.finishCreation();
 
         await processContractInstance.addStep(STEP_ADDRESS_2).catch(x => {
@@ -39,6 +48,7 @@ contract("Process", function(accounts) {
         let processContractInstance = await Process.new(PROCESS_NAME);
         
         await processContractInstance.addStep(STEP_ADDRESS_1);
+        await processContractInstance.setItem(ITEM_ADDRESS_1);
         await processContractInstance.finishCreation();
         await processContractInstance.finishCreation().catch(x => {
             assert.ok(x.hijackedStack.includes("revert"));
@@ -49,6 +59,7 @@ contract("Process", function(accounts) {
         let processContractInstance = await Process.new(PROCESS_NAME);
         
         await processContractInstance.addStep(STEP_ADDRESS_1);
+        await processContractInstance.setItem(ITEM_ADDRESS_1);
         await processContractInstance.finishCreation();
 
         assert.equal(await processContractInstance.status(), 1);
@@ -79,7 +90,7 @@ contract("Process", function(accounts) {
 
         await processContractInstance.addStep(STEP_ADDRESS_1);
         await processContractInstance.addStep(STEP_ADDRESS_2);
-        await processContractInstance.addStep(accounts[4]);
+        await processContractInstance.addStep(STEP_ADDRESS_3);
 
         let array = [0,2];
         await processContractInstance.removeSteps(array);
@@ -92,8 +103,8 @@ contract("Process", function(accounts) {
 
         await processContractInstance.addStep(STEP_ADDRESS_1);
         await processContractInstance.addStep(STEP_ADDRESS_2);
+        await processContractInstance.setItem(ITEM_ADDRESS_1);
         await processContractInstance.finishCreation();
-
         await processContractInstance.nextStep().catch(x => {
             assert.ok(x.hijackedStack.includes("revert"));
         });
