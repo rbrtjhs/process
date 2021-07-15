@@ -11,6 +11,5 @@ contract("Step", function(accounts) {
         assert.equal(await processContractInstance.name(), PROCESS_NAME);
         assert.equal(await stepContractInstance.name(), STEP_NAME);
         assert.equal(await processContractInstance.steps(0), stepContractInstance.address);
-    });
-    
+    });   
 });

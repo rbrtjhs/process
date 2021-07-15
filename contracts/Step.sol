@@ -13,8 +13,8 @@ contract Step is Ownable {
         _;
     }
 
-    Process process;
-    Item item;
+    Process public process;
+    Item public item;
     string public name;
 
     constructor (string memory _name, Process _process) {
