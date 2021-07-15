@@ -14,17 +14,17 @@ contract Process is Ownable {
     }
 
     modifier inStatus(ProcessStatus _status) {
-        require(status == _status);
+        require(status == _status, "Process is in not in desired status.");
         _;
     }
 
     modifier onlyStepOwner() {
-        require(steps[stepIndex].owner() == msg.sender);
+        require(steps[stepIndex].owner() == msg.sender, "Only step owner can change.");
         _;
     }
 
     Item public item;
-    Step [] public steps;
+    Step[] public steps;
     ProcessStatus public status;
     uint256 public stepIndex;
     string public name;
@@ -35,21 +35,21 @@ contract Process is Ownable {
         name = _name;
     }
 
-    function setItem(Item _item) inStatus(ProcessStatus.MODIFIABLE) external {
+    function setItem(Item _item) external inStatus(ProcessStatus.MODIFIABLE) {
         item = _item;
     }
 
-    function addStep(Step _step) inStatus(ProcessStatus.MODIFIABLE) external {
-        steps.push(_step);   
+    function addStep(Step _step) external inStatus(ProcessStatus.MODIFIABLE) {
+        steps.push(_step);
     }
 
-    function removeSteps(uint256 [] memory _indexes) inStatus(ProcessStatus.MODIFIABLE)  external {
+    function removeSteps(uint256[] memory _indexes) external inStatus(ProcessStatus.MODIFIABLE) {
         for (uint256 i = 0; i < _indexes.length; i++) {
             removeStep(_indexes[i]);
         }
     }
 
-    function removeStep(uint index) inStatus(ProcessStatus.MODIFIABLE) public {
+    function removeStep(uint index) public inStatus(ProcessStatus.MODIFIABLE) {
         if (index >= steps.length) return;
 
         for (uint i = index; i < steps.length-1; i++){
@@ -58,18 +58,18 @@ contract Process is Ownable {
         delete steps[steps.length-1];
     }
 
-    function finishCreation() inStatus(ProcessStatus.MODIFIABLE) external {
-        require(steps.length > 0);
-        require(address(item) != address(0));
+    function finishCreation() external inStatus(ProcessStatus.MODIFIABLE) {
+        require(steps.length > 0, "Process needs at least 1 step.");
+        require(address(item) != address(0), "Process needs item.");
         for (uint i = 0; i < steps.length; i++) {
             steps[i].setItem(item);
         }
         status = ProcessStatus.IN_PROGRESS;
     }
 
-    function nextStep() onlyStepOwner() inStatus(ProcessStatus.IN_PROGRESS) external {
+    function nextStep() external onlyStepOwner() inStatus(ProcessStatus.IN_PROGRESS) {
         if (stepIndex < steps.length - 1) {
-            stepIndex++; 
+            stepIndex++;
             steps[stepIndex - 1].transferToStep(steps[stepIndex]);
         }
     }

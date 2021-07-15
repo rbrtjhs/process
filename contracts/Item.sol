@@ -9,10 +9,10 @@ contract Item {
     Step public initialStep;
     Step public currentStep;
     string public name;
-    mapping(address => Detail []) public details;
+    mapping(address => Detail[]) public details;
 
     modifier onlyCurrentStep() {
-        require(msg.sender == address(currentStep));
+        require(msg.sender == address(currentStep), "Only current step can change");
         _;
     }
 
@@ -22,11 +22,11 @@ contract Item {
         currentStep = _initialStep;
     }
 
-    function addDetail(Detail detail) onlyCurrentStep() external {
+    function addDetail(Detail detail) external onlyCurrentStep() {
         details[address(currentStep)].push(detail);
     }
 
-    function setStep(Step step) onlyCurrentStep() external {
+    function setStep(Step step) external onlyCurrentStep() {
         currentStep = step;
     }
 }
