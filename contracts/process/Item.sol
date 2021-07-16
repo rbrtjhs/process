@@ -3,7 +3,7 @@
 pragma solidity ^0.8.0;
 
 import "./Step.sol";
-import "./Detail.sol";
+import "../detail/Detail.sol";
 
 contract Item {
     Step public initialStep;

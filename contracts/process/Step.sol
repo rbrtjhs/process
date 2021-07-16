@@ -3,7 +3,7 @@
 pragma solidity ^0.8.0;
 
 import "./Process.sol";
-import "./Detail.sol";
+import "../detail/Detail.sol";
 import "./Item.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
