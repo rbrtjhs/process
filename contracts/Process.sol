@@ -14,12 +14,12 @@ contract Process is Ownable {
     }
 
     modifier inStatus(ProcessStatus _status) {
-        require(status == _status, "Process is in not in desired status.");
+        require(status == _status, "Process is in not in desired status");
         _;
     }
 
     modifier onlyStepOwner() {
-        require(steps[stepIndex].owner() == msg.sender, "Only step owner can change.");
+        require(steps[stepIndex].owner() == msg.sender, "Only step owner can change");
         _;
     }
 
@@ -59,8 +59,8 @@ contract Process is Ownable {
     }
 
     function finishCreation() external inStatus(ProcessStatus.MODIFIABLE) {
-        require(steps.length > 0, "Process needs at least 1 step.");
-        require(address(item) != address(0), "Process needs item.");
+        require(steps.length > 0, "Process needs at least 1 step");
+        require(address(item) != address(0), "Process needs item");
         for (uint i = 0; i < steps.length; i++) {
             steps[i].setItem(item);
         }
@@ -69,6 +69,7 @@ contract Process is Ownable {
 
     function nextStep() external onlyStepOwner() inStatus(ProcessStatus.IN_PROGRESS) {
         if (stepIndex < steps.length - 1) {
+            require(address(item.details(address(steps[stepIndex]),0)) != address(0), "Can't move to the next step without adding a detail.");
             steps[stepIndex].transferToStep(steps[stepIndex + 1]);
             stepIndex++;
             if (stepIndex == steps.length - 1) {
