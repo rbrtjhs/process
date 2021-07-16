@@ -24,6 +24,7 @@ contract Step is Ownable {
     }
 
     function addDetail(Detail _detail) external onlyOwner() {
+        //only during in_progress
         item.addDetail(_detail);
     }
 

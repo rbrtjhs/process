@@ -69,8 +69,11 @@ contract Process is Ownable {
 
     function nextStep() external onlyStepOwner() inStatus(ProcessStatus.IN_PROGRESS) {
         if (stepIndex < steps.length - 1) {
+            steps[stepIndex].transferToStep(steps[stepIndex + 1]);
             stepIndex++;
-            steps[stepIndex - 1].transferToStep(steps[stepIndex]);
+            if (stepIndex == steps.length - 1) {
+                status = ProcessStatus.FINISHED;
+            }
         }
     }
 }

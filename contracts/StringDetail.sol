@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 import "./Detail.sol";
 
 contract StringDetail is Detail {
-    string text;
+    string public text;
 
     constructor(string memory _text) {
         text = _text;
