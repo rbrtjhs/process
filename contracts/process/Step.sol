@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Step is Ownable {
     modifier onlyProcess() {
-        require(msg.sender == address(process), "Only process can change.");
+        require(msg.sender == address(process), "Only process can change");
         _;
     }
 
@@ -25,7 +25,7 @@ contract Step is Ownable {
     }
 
     function addDetail(Detail _detail) external onlyOwner() {
-        require(process.status() == ProcessLibrary.ProcessStatus.IN_PROGRESS);
+        require(process.status() == ProcessLibrary.ProcessStatus.IN_PROGRESS, "Detail can't be added if the process is not in status IN_PROGRESS");
         item.addDetail(_detail);
     }
 
