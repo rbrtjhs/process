@@ -68,9 +68,8 @@ contract Process is Ownable {
             require(address(item.details(address(steps[stepIndex]),0)) != address(0), "Can't move to the next step without adding a detail.");
             steps[stepIndex].transferToStep(steps[stepIndex + 1]);
             stepIndex++;
-            if (stepIndex == steps.length - 1) {
-                status = ProcessLibrary.ProcessStatus.FINISHED;
-            }
+        } else if (stepIndex == steps.length - 1) {
+            status = ProcessLibrary.ProcessStatus.FINISHED;
         }
     }
 }

@@ -33,9 +33,7 @@ contract("Step", function(accounts) {
             let stringDetail = await StringDetail.new("Test detail " + i);
             await stepContractInstances[i].addDetail(stringDetail.address);
             assert.equal(await itemContractInstance.details(stepContractInstances[i].address, 0), await stringDetail.address);
-            if (i < stepContractInstances.length - 1) {
-                await processContractInstance.nextStep();
-            }
+            await processContractInstance.nextStep();
         }
         assert.equal((await processContractInstance.status()).toNumber(), 2);
     });

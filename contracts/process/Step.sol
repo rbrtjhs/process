@@ -1,10 +1,11 @@
-// SPDX-License-Identifier: GNU GPL v3
+// SPDX-License-Identifier: GPL-3.0
 
 pragma solidity ^0.8.0;
 
 import "./Process.sol";
 import "../detail/Detail.sol";
 import "./Item.sol";
+import "../ProcessLibrary.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Step is Ownable {
@@ -24,7 +25,7 @@ contract Step is Ownable {
     }
 
     function addDetail(Detail _detail) external onlyOwner() {
-        //only during in_progress
+        require(process.status() == ProcessLibrary.ProcessStatus.IN_PROGRESS);
         item.addDetail(_detail);
     }
 
