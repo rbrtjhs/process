@@ -5,17 +5,17 @@ pragma solidity ^0.8.0;
 import "./Step.sol";
 import "./Item.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import { ProcessLibrary } from "../ProcessLibrary.sol";
+import "../ProcessLibrary.sol";
 
 contract Process is Ownable {
 
-    modifier inStatus(ProcessLibrary.ProcessStatus _status) {
-        require(status == _status, "Process is in not in desired status");
+    modifier onlyStepOwner() {
+        require(steps[stepIndex].owner() == msg.sender, "Only step owner can change");
         _;
     }
 
-    modifier onlyStepOwner() {
-        require(steps[stepIndex].owner() == msg.sender, "Only step owner can change");
+    modifier inStatus(ProcessLibrary.ProcessStatus _status) {
+        require(status == _status, "Process is in not in desired status");
         _;
     }
 
@@ -46,7 +46,9 @@ contract Process is Ownable {
     }
 
     function removeStep(uint index) public inStatus(ProcessLibrary.ProcessStatus.MODIFIABLE) {
-        if (index >= steps.length) return;
+        if (index >= steps.length) {
+            return;
+        }
 
         for (uint i = index; i < steps.length-1; i++){
             steps[i] = steps[i+1];
@@ -60,12 +62,13 @@ contract Process is Ownable {
         for (uint i = 0; i < steps.length; i++) {
             steps[i].setItem(item);
         }
+        item.setInitialStep(steps[0]);
         status = ProcessLibrary.ProcessStatus.IN_PROGRESS;
     }
 
     function nextStep() external onlyStepOwner() inStatus(ProcessLibrary.ProcessStatus.IN_PROGRESS) {
         if (stepIndex < steps.length - 1) {
-            require(address(item.details(address(steps[stepIndex]),0)) != address(0), "Can't move to the next step without adding a detail.");
+            require(address(item.details(address(steps[stepIndex]),0)) != address(0), "Can't move to the next step without adding a detail");
             steps[stepIndex].transferToStep(steps[stepIndex + 1]);
             stepIndex++;
         } else if (stepIndex == steps.length - 1) {
