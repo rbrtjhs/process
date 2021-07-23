@@ -60,7 +60,9 @@ contract Process is Ownable {
     function finishCreation() external onlyOwner() inStatus(ProcessLibrary.ProcessStatus.MODIFIABLE) {
         require(steps.length > 0, "Process needs at least 1 step");
         require(address(item) != address(0), "Process needs item");
+        require(item.process() == this, "Item's process is not belonging to this process");
         for (uint i = 0; i < steps.length; i++) {
+            require(steps[i].process() == this, "Each step must have this process as set process");
             steps[i].setItem(item);
         }
         item.setInitialStep(steps[0]);

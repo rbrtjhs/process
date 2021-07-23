@@ -25,7 +25,7 @@ contract("Process", function(accounts) {
             await processContractInstance.addStep(step.address);
             stepContractInstances.push(step);
         }
-        itemContractInstance = await Item.new(ITEM_NAME, processContractInstance.address); 
+        itemContractInstance = await Item.new(ITEM_NAME, processContractInstance.address);
         await processContractInstance.setItem(itemContractInstance.address);
     });
 

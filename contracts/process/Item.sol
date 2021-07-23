@@ -12,7 +12,7 @@ contract Item {
 
     Step public initialStep;
     Step public currentStep;
-    Process process;
+    Process public process;
     string public name;
     mapping(address => Detail[]) public details;
 
