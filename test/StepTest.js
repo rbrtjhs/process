@@ -20,6 +20,7 @@ contract("Step", function(accounts) {
         stepContractInstances = [];
         for (let i = 0; i < NUMBER_OF_STEPS; i++) {
             let step = await Step.new(STEP_NAME + i, processContractInstance.address);
+            await processContractInstance.addStep(step.address);
             stepContractInstances.push(step);
         }
         itemContractInstance = await Item.new(ITEM_NAME, processContractInstance.address);
@@ -32,10 +33,9 @@ contract("Step", function(accounts) {
             assert.equal(await itemContractInstance.currentStep(), stepContractInstances[i].address);
             let stringDetail = await StringDetail.new("Test detail " + i);
             await stepContractInstances[i].addDetail(stringDetail.address);
-            assert.equal(await itemContractInstance.details(stepContractInstances[i].address, 0), await stringDetail.address);
+            assert.equal(await itemContractInstance.details(stepContractInstances[i].address, 0), stringDetail.address);
             await processContractInstance.nextStep();
         }
         assert.equal((await processContractInstance.status()).toNumber(), 2);
     });
-
 });

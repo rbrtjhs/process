@@ -22,6 +22,7 @@ contract("Process", function(accounts) {
         stepContractInstances = [];
         for (let i = 0; i < NUMBER_OF_STEPS; i++) {
             let step = await Step.new(STEP_NAME + i, processContractInstance.address);
+            await processContractInstance.addStep(step.address);
             stepContractInstances.push(step);
         }
         itemContractInstance = await Item.new(ITEM_NAME, processContractInstance.address); 

@@ -8,6 +8,8 @@ import "./Process.sol";
 import "../ProcessLibrary.sol";
 
 contract Item {
+    event DetailAdded(Process process, Step step, Item item);
+
     Step public initialStep;
     Step public currentStep;
     Process process;
@@ -30,7 +32,10 @@ contract Item {
     }
 
     function addDetail(Detail detail) external onlyCurrentStep() {
+        require(process.status() == ProcessLibrary.ProcessStatus.IN_PROGRESS, "Detail can't be added if the process is not in status IN_PROGRESS");
         details[address(currentStep)].push(detail);
+
+        emit DetailAdded(process, currentStep, this);
     }
 
     function setStep(Step step) external onlyCurrentStep() {
