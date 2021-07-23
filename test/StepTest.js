@@ -1,3 +1,5 @@
+const expectRevert = require("@openzeppelin/test-helpers/src/expectRevert");
+
 const Process = artifacts.require('Process');
 const Step = artifacts.require('Step');
 const Item = artifacts.require('Item');
@@ -28,7 +30,14 @@ contract("Step", function(accounts) {
         await processContractInstance.finishCreation();
     });
 
-    it("Add detail for each step and finish the process.", async () => {
+    it("Constructor test", async () => {
+        for (let i = 0; i < NUMBER_OF_STEPS; i++) {
+            assert.equal(await stepContractInstances[i].name(), STEP_NAME + i);
+            assert.equal(await stepContractInstances[i].process(), processContractInstance.address);
+        }
+    })
+
+    it("Add detail and item for each step, finish creation, transfer the steps and finish the process", async () => {
         for (let i = 0; i < stepContractInstances.length; i++) {
             assert.equal(await itemContractInstance.currentStep(), stepContractInstances[i].address);
             let stringDetail = await StringDetail.new("Test detail " + i);
@@ -37,5 +46,19 @@ contract("Step", function(accounts) {
             await processContractInstance.nextStep();
         }
         assert.equal((await processContractInstance.status()).toNumber(), 2);
+    });
+
+    it("Prevent adding detail except from owner", async () => {
+        let detail = accounts[1];
+        let newOwner = accounts[2];
+        await stepContractInstances[0].transferOwnership(newOwner);
+        await expectRevert(stepContractInstances[0].addDetail(detail), "Ownable: caller is not the owner");
+    });
+
+    it("Prevent set item in step from other than process", async () => {
+        let process = accounts[1];
+        let item = accounts[2];
+        let step = await Step.new(STEP_NAME, process);
+        await expectRevert(step.setItem(item, {from: accounts[3]}), "Only process can change");
     });
 });
