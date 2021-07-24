@@ -6,4 +6,4 @@ install:
   - npm install
 script: 
   - npx truffle run coverage
-  - cat coverage/lcov.info | coveralls
+  # - cat coverage/lcov.info | coveralls
