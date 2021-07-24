@@ -19,6 +19,8 @@
     "@openzeppelin/contracts": "^4.1.0"
   },
   "devDependencies": {
-    "@openzeppelin/test-helpers": "^0.5.12"
+    "@openzeppelin/test-helpers": "^0.5.12",
+    "coveralls": "^3.1.1",
+    "solidity-coverage": "^0.7.16"
   }
 }
