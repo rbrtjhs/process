@@ -16,7 +16,8 @@
   "author": "rbrtjhs@gmail.com",
   "license": "GPL-3.0",
   "dependencies": {
-    "@openzeppelin/contracts": "^4.1.0"
+    "@openzeppelin/contracts": "^4.1.0",
+    "truffle": "^5.4.2"
   },
   "devDependencies": {
     "@openzeppelin/test-helpers": "^0.5.12",
