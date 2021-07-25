@@ -14,7 +14,7 @@
     "url": "git@github.com:rbrtjhs/process.git"
   },
   "author": "rbrtjhs@gmail.com",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "dependencies": {
     "@openzeppelin/contracts": "^4.1.0",
     "truffle": "^5.4.2"
