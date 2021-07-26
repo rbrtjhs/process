@@ -31,3 +31,11 @@ The process can start. Each step will add a detail by creating new contract inst
 With this approach each step will be responsible for itself and all data will be saved.
 
 Once finished process will be in status FINISHED.
+
+##INSTALL
+
+You can download it via npm:
+
+```
+npm i @rbrtjhs/process
+```

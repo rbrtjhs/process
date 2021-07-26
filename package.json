@@ -1,6 +1,6 @@
 {
   "name": "@rbrtjhs/process",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Manage items through specific process specified by steps.",
   "main": "truffle-config.js",
   "directories": {
@@ -9,11 +9,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": ["solidity", "ethereum", "truffle", "smart contract","process"],
   "repository": {
     "type": "git",
     "url": "git@github.com:rbrtjhs/process.git"
   },
   "author": "rbrtjhs@gmail.com",
+  "bugs": {
+    "url": "https://github.com/rbrtjhs/process/issues"
+  },
   "license": "Apache-2.0",
   "dependencies": {
     "@openzeppelin/contracts": "^4.1.0",
