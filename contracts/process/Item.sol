@@ -7,6 +7,9 @@ import "../detail/Detail.sol";
 import "./Process.sol";
 import "../ProcessLibrary.sol";
 
+/**
+    @author rbrtjhs@gmail.com
+ */
 contract Item {
     event DetailAdded(Process process, Step step, Item item);
 

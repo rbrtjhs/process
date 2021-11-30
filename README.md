@@ -32,7 +32,7 @@ With this approach each step will be responsible for itself and all data will be
 
 Once finished process will be in status FINISHED.
 
-##INSTALL
+## INSTALL
 
 You can download it via npm:
 
