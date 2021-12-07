@@ -1,6 +1,8 @@
 const Process = artifacts.require('Process');
 const Step = artifacts.require('Step');
 const Item = artifacts.require('Item');
+const ItemRegistry = artifacts.require('ItemRegistry');
+
 const {
     expectEvent,  // Assertions for emitted events
     expectRevert, // Assertions for transactions that should fail
@@ -26,22 +28,24 @@ contract("Process", function(accounts) {
             stepContractInstances.push(step);
         }
         itemContractInstance = await Item.new(ITEM_NAME, processContractInstance.address);
-        await processContractInstance.setItem(itemContractInstance.address);
+        await processContractInstance.addItem(itemContractInstance.address);
     });
 
-    it("Should create Process contract with status 0 (MODIFIABLE) and stepIndex = 0", async () => {
+    it("Should create Process contract with status 0 (MODIFIABLE)", async () => {
         assert.equal(await processContractInstance.name(), PROCESS_NAME);
         assert.equal(await processContractInstance.status(), 0);
-        assert.equal(await processContractInstance.stepIndex(), 0);
+        assert.equal(await processContractInstance.steps(NUMBER_OF_STEPS), stepContractInstances[NUMBER_OF_STEPS - 1].address);
     });
 
-    it("Set item.", async() => {
-        assert.equal(await processContractInstance.item(), itemContractInstance.address);
+    it("Add item.", async() => {
+        let itemRegistry = await (ItemRegistry.at(await(processContractInstance.itemRegistry())));
+        let item = await itemRegistry.items(0);
+        assert.equal(item, itemContractInstance.address);
     });
 
     it("Add steps", async () => {
         for (let i = 0; i < NUMBER_OF_STEPS; i++) {
-            assert.equal(await processContractInstance.steps(i), stepContractInstances[i].address);
+            assert.equal(await processContractInstance.steps(i + 1), stepContractInstances[i].address);
         }
     });
 
@@ -52,17 +56,18 @@ contract("Process", function(accounts) {
     });
 
     it("Remove steps.", async () => {
-        let array = [0,2];
+        let array = [1,3];
         await processContractInstance.removeSteps(array);
 
-        assert.equal(await processContractInstance.steps(0), stepContractInstances[1].address);
+        assert.equal(await processContractInstance.steps(1), stepContractInstances[1].address);
     });
 
     it("Remove step.", async () => {
-        assert.equal(await processContractInstance.steps(0), stepContractInstances[0].address);
-        await processContractInstance.removeStep(0);
-        assert.equal(await processContractInstance.steps(0), stepContractInstances[1].address);
+        assert.equal(await processContractInstance.steps(1), stepContractInstances[0].address);
+        await processContractInstance.removeStep(1);
+        assert.equal(await processContractInstance.steps(1), stepContractInstances[1].address);
     });
+
     it("Prevent adding steps if not in MODIFIABLE status.", async () => {    
         await processContractInstance.finishCreation();
 
@@ -72,7 +77,7 @@ contract("Process", function(accounts) {
     it("Try to finish creation of non Step contract.", async () => {
         let process = await Process.new(PROCESS_NAME);
         await process.addStep(accounts[5]);
-        await process.setItem(accounts[6]);
+        await process.addItem(accounts[6]);
         await expectRevert(process.finishCreation(), "revert");
     });
 
@@ -80,8 +85,8 @@ contract("Process", function(accounts) {
         let process = await Process.new(PROCESS_NAME);
         let step = await Step.new(STEP_NAME, process.address);
         await process.addStep(step.address);
-        await process.setItem(accounts[5]);
-        await expectRevert(process.finishCreation(), "revert");
+        await process.addItem(accounts[5]);
+        await debug(process.finishCreation());
     })
 
     it("Prevent creation finishing without steps.", async () => {
@@ -92,13 +97,13 @@ contract("Process", function(accounts) {
     it("Prevent creation finishing without item.", async () => {
         let process = await Process.new(PROCESS_NAME);
         await process.addStep(accounts[5]);
-        await expectRevert(process.finishCreation(), "Process needs item");
+        await expectRevert(process.finishCreation(), "Process needs at least one item");
     });
 
     it("Prevent retrieve not-existing step.", async () => {
-        assert.equal(await processContractInstance.steps(0), stepContractInstances[0].address);
-        assert.equal(await processContractInstance.steps(1), stepContractInstances[1].address);
-        await expectRevert(processContractInstance.steps(3), "revert");
+        assert.equal(await processContractInstance.steps(1), stepContractInstances[0].address);
+        assert.equal(await processContractInstance.steps(3), stepContractInstances[2].address);
+        await expectRevert(processContractInstance.steps(4), "revert");
     });
 
     it("Can't finish the process creation which is already in status IN PROGRESS.", async () => {

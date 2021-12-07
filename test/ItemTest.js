@@ -26,7 +26,7 @@ contract("Item", function(accounts) {
         let stepContractInstance = await Step.new(STEP_NAME, processContractInstance.address);
         await processContractInstance.addStep(stepContractInstance.address);
         let itemContractInstance = await Item.new(ITEM_NAME, processContractInstance.address);
-        await processContractInstance.setItem(itemContractInstance.address);
+        await processContractInstance.addItem(itemContractInstance.address);
         await processContractInstance.finishCreation();
         let detail = await StringDetail.new(STRING_DETAIL);
         await stepContractInstance.addDetail(detail.address);

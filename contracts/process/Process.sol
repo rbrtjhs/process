@@ -55,12 +55,12 @@ contract Process is Ownable {
         }
     }
 
-    function removeStep(uint index) public onlyOwner() inStatus(ProcessLibrary.ProcessStatus.MODIFIABLE) {
-        if (index >= steps.length) {
+    function removeStep(uint _index) public onlyOwner() inStatus(ProcessLibrary.ProcessStatus.MODIFIABLE) {
+        if (_index >= steps.length || _index == 0) {
             return;
         }
 
-        for (uint i = index; i < steps.length-1; i++){
+        for (uint i = _index; i < steps.length-1; i++){
             steps[i] = steps[i+1];
         }
         delete steps[steps.length-1];
@@ -73,8 +73,8 @@ contract Process is Ownable {
         For each item it will  
      */
     function finishCreation() external onlyOwner() inStatus(ProcessLibrary.ProcessStatus.MODIFIABLE) {
-        require(steps.length > 0, "Process needs at least 1 step"); 
-        require(itemRegistry.getItemsSize() > 0, "Process needs at least one item.");
+        require(steps.length > 1, "Process needs at least 1 step"); 
+        require(itemRegistry.getItemsSize() > 0, "Process needs at least one item");
         for (uint i = 0; i < steps.length; i++) {
             require(steps[i].process() == this, "Each step must have this process as set process");
             steps[i].setItem(Item(address(0)));
