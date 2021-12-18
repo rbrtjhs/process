@@ -81,13 +81,17 @@ contract("Process", function(accounts) {
         await expectRevert(process.finishCreation(), "revert");
     });
 
+    /**
+     * While test run with: test --stacktrace-extra you will get the reason like this: Error: Revert (message: Target contract does not contain code)
+     * which is expected behaviour. For some reason without running an extra flag, you will get out of gas
+     */
     it("Try to finish creation of non Item contract." , async () => {
-        let process = await Process.new(PROCESS_NAME);
-        let step = await Step.new(STEP_NAME, process.address);
+        const process = await Process.new(PROCESS_NAME);
+        const step = await Step.new(STEP_NAME, process.address);
         await process.addStep(step.address);
         await process.addItem(accounts[5]);
-        await debug(process.finishCreation());
-    })
+        await expectRevert.outOfGas(process.finishCreation());
+    });
 
     it("Prevent creation finishing without steps.", async () => {
         let process = await Process.new(PROCESS_NAME);

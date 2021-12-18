@@ -9,7 +9,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["solidity", "ethereum", "truffle", "smart contract","process"],
+  "keywords": [
+    "solidity",
+    "ethereum",
+    "truffle",
+    "smart contract",
+    "process"
+  ],
   "repository": {
     "type": "git",
     "url": "git@github.com:rbrtjhs/process.git"
@@ -21,6 +27,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@openzeppelin/contracts": "^4.1.0",
+    "ganache": "^6.4.5",
     "truffle": "^5.4.2"
   },
   "devDependencies": {
@@ -29,6 +36,6 @@
     "solidity-coverage": "^0.7.16"
   },
   "publishConfig": {
-    "access": "public" 
+    "access": "public"
   }
 }

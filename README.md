@@ -7,11 +7,16 @@ The product is known as an item.
 Each item is built with specific steps and collection of the specific steps is called process.
 The purpose of this project is to manage items through specific process(es) specified by steps.
 
-Process and step are ownable where process should belong to the user and step should belong to the step maker.
+Process and step are ownable where process should belong to the user and step should belong to the step maker. 
+Once the step was made by the human it the owner should be transfered to the machine.
 
 ## USAGE 
-The user will create process. User will create steps and reassign each specific step to the machine. User will create an item.
-The user will add steps to the specific process. The user has to add item to the process. After creation of the process user will mark the process as created by calling finishCreation(). 
+The user will create process. 
+The user will create steps and reassign each specific step to the machine. 
+The user will create an item.
+The user will add steps to the specific process. 
+The user has to add item to the process. 
+After creation of the process user will mark the process as created by calling finishCreation(). 
 
 Ice cream example:
 User will create process called CHOCO ICE CREAM PROCESS which will be in status MODIFIABLE.
